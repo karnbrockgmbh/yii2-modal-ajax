@@ -1,0 +1,25 @@
+{
+    "name": "karnrbrockgmbh/yii2-modal-ajax",
+    "description": "",
+    "keywords": [
+        "yii2",
+        "bootstrap",
+        "modal",
+        "ajax",
+        "jquery"
+    ],
+    "homepage": "https://github.com/karnbrockgmbh/yii2-modal-ajax",
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Karnbrock Gmbh",
+            "homepage": "http://karnbrock.biz"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "karnbrockgmbh\\modal\\": ""
+        }
+    }
+}
