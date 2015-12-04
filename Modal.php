@@ -15,7 +15,13 @@ class Modal extends \yii\bootstrap\Modal {
      */
     public function run()
     {
+        $view = $this->getView();
         parent::run();
-        ModalAsset::register($this->getView());
+
+        ModalAsset::register($view);
+
+        $id = $this->options['id'];
+        $js = "jQuery('#$id').kbModalAjax();";
+        $view->registerJs($js);
     }
 }
