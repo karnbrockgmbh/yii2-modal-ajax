@@ -7,9 +7,7 @@
 
 namespace karnbrockgmbh\modal;
 
-use Yii;
-
-class ModalAsset extends \yii\bootstrap\Modal {
+class ModalAsset extends \yii\web\AssetBundle {
     /**
      * @inheritdoc
      */
