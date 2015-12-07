@@ -4,7 +4,7 @@
     "keywords": [
         "yii2",
         "bootstrap",
-        "modal",
+        "modal"
     ],
     "homepage": "https://github.com/karnbrockgmbh/yii2-modal-ajax",
     "type": "yii2-extension",
