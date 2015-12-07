@@ -35,21 +35,31 @@
 
     ModalAjax.prototype.init = function(options) {
         this.initalRequestUrl = options.url;
-        $(this.element).on('show.bs.modal', this.show.bind(this));
+        this.ajaxSubmit = options.ajaxSubmit || true;
+        jQuery(this.element).on('show.bs.modal', this.shown.bind(this));
     };
 
     /**
-     * Requests the content of the modal and injects it
+     * Requests the content of the modal and injects it, called after the
+     * modal is shown
      */
-    ModalAjax.prototype.show = function() {
-        // Clear previous html before loading
+    ModalAjax.prototype.shown = function() {
+        // Clear original html before loading
         jQuery(this.element).find('.modal-body').html('');
 
         jQuery.ajax({
             url: this.initalRequestUrl,
-            context: this
-        }).success(function(data) {
-            this.injectHtml(data);
+            context: this,
+            beforeSend: function (xhr, settings) {
+                jQuery(this.element).triggerHandler('kbModalBeforeShow', [xhr, settings]);
+            },
+            success: function(data, status, xhr) {
+                this.injectHtml(data);
+                if (this.ajaxSubmit) {
+                    jQuery(this.element).off('submit').on('submit', this.formSubmit.bind(this));
+                }
+                jQuery(this.element).triggerHandler('kbModalShow', [data, status, xhr]);
+            }
         });
     };
 
@@ -60,6 +70,12 @@
     ModalAjax.prototype.injectHtml = function(html) {
         // Find form and inject it
         var form = jQuery(html).filter('form');
+
+        // Remove existing forms
+        if (jQuery(this.element).find('form').length > 0) {
+            jQuery(this.element).find('form').off().yiiActiveForm('destroy').remove();
+        }
+
         jQuery(this.element).find('.modal-body').html(form);
 
         var knownScripts = getPageScriptTags();
@@ -120,6 +136,34 @@
         for (var i = 0; i < newScripts.length; i += 1) {
             jQuery.getScript(newScripts[i] + (new Date().getTime()), scriptLoaded);
         }
+    };
+
+    /**
+     * Adds event handlers to the form to check for submit
+     */
+    ModalAjax.prototype.formSubmit = function() {
+        var form = jQuery(this.element).find('form');
+
+        // Convert form to ajax submit
+        jQuery.ajax({
+            type: form.attr('method'),
+            url: form.attr('action'),
+            data: form.serialize(),
+            context: this,
+            beforeSend: function (xhr, settings) {
+                jQuery(this.element).triggerHandler('kbModalBeforeSubmit', [xhr, settings]);
+            },
+            success: function(data, status, xhr) {
+                var contentType = xhr.getResponseHeader('content-type') || '';
+                if (contentType.indexOf('html') > -1) {
+                    // Assume form contains errors if html
+                    this.injectHtml(data);
+                }
+                jQuery(this.element).triggerHandler('kbModalSubmit', [data, status, xhr]);
+            }
+        });
+
+        return false;
     };
 
     $.fn[pluginName] = function(options) {

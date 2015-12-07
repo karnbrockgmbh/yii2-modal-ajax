@@ -18,6 +18,12 @@ class Modal extends \yii\bootstrap\Modal {
     public $url;
 
     /**
+     * Submit the form via ajax
+     * @var boolean
+     */
+    public $ajaxSubmit = true;
+
+    /**
      * @inheritdocs
      */
     public function run()
@@ -28,7 +34,13 @@ class Modal extends \yii\bootstrap\Modal {
         ModalAsset::register($view);
 
         $id = $this->options['id'];
-        $js = "jQuery('#$id').kbModalAjax({url: '$this->url'});";
+        $ajaxSubmit = $this->ajaxSubmit ? 'true' : 'false';
+        $js = <<<JS
+        jQuery('#$id').kbModalAjax({
+            url: '{$this->url}',
+            ajaxSubmit: {$ajaxSubmit},
+        });
+JS;
         $view->registerJs($js);
     }
 }
