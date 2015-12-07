@@ -1,6 +1,6 @@
 # yii2-modal-ajax
 
-A wrapper around Yii2 Bootstrap Modal for using an active form with AJAX inside.  
+A wrapper around Yii2 Bootstrap Modal for using an ActiveForm via AJAX inside.  
 
 ## Usage
 
