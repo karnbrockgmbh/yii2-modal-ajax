@@ -76,7 +76,7 @@
             jQuery(this.element).find('form').off().yiiActiveForm('destroy').remove();
         }
 
-        jQuery(this.element).find('.modal-body').html(form);
+        jQuery(this.element).find('.modal-body').html(html);
 
         var knownScripts = getPageScriptTags();
         var knownCssLinks = getPageCssLinks();
