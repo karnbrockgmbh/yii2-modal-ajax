@@ -36,7 +36,7 @@
     ModalAjax.prototype.init = function(options) {
         this.initalRequestUrl = options.url;
         this.ajaxSubmit = options.ajaxSubmit || true;
-        jQuery(this.element).on('show.bs.modal', this.shown.bind(this));
+        jQuery(this.element).on('shown.bs.modal', this.shown.bind(this));
     };
 
     /**
